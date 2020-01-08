@@ -300,19 +300,33 @@ def find_connect():
     with val_graph.as_default():
         images = np.random.rand(1, 224, 224, 3)
         inference(images, False, image_norm=False, has_bn=False, qweight=False, qactivation=False)
-    nodes = tf.get_collection('nodes')
-    cfg_nodes = tf.get_collection('cfg_nodes')
-
-    for i in range(len(cfg_nodes)):
-
-        if cfg_nodes[i]['type'] == 'Conv2D':
-            print(nodes[i]['input'].name, nodes[i]['output'].name)
-            output = nodes[i]['output']
-            for j in range(len(cfg_nodes)):
-                input = nodes[j]['input']
-                if cfg_nodes[j]['type'] == 'Conv2D':
+        nodes = tf.get_collection('nodes')
+        cfg_nodes = tf.get_collection('cfg_nodes')
+        for i in range(len(cfg_nodes)):
+            if cfg_nodes[i]['name'] == cfg.first_conv_name:
+                cfg_nodes[i]['input_layer'] = 'image'
+            if cfg_nodes[i]['type'] == 'Conv2D':
+                input = nodes[i]['input']
+                for j in range(len(cfg_nodes)):
+                    output = nodes[j]['output']
                     if output.name == input.name:
-                        cfg_nodes[j]['input_layer'] = cfg_nodes[i]['name']
+                        cfg_nodes[i]['input_layer'] = cfg_nodes[j]['name']
+                        break
+            elif cfg_nodes[i]['type'] == 'Add':
+                input = nodes[i]['input']
+                cfg_nodes[i]['input_layer'] = []
+                for _input in input:
+                    for j in range(len(cfg_nodes)):
+                        output = nodes[j]['output']
+                        if output.name == _input.name:
+                            cfg_nodes[i]['input_layer'].append(cfg_nodes[j]['name'])
+                            break
+            else:
+                raise NotImplementedError
+
+        for node in cfg_nodes:
+            print(node['name'], node['input_layer'])
+
 
 
 def evaluate(model_checkpoint_path='train_log/model.ckpt', has_bn=True,
