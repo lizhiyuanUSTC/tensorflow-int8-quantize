@@ -13,7 +13,7 @@ from quantize_model import prepare_calibrate_imgs, find_weight_scale, find_featu
 def init():
     from keras.applications import MobileNetV2
 
-    network = MobileNetV2(alpha=1.0)
+    network = MobileNetV2(alpha=0.5)
     params = network.get_weights()
 
     graph = tf.Graph()

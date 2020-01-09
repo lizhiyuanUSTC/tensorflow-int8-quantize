@@ -50,7 +50,7 @@ def create_separable_conv(x, out_channels, ksize, stride=1,
     return f
 
 
-def inference(images, phase_train=False, has_bn=True, image_norm=True, alpha=1.0,
+def inference(images, phase_train=False, has_bn=True, image_norm=True, alpha=0.5,
               qactivation=False, qweight=False, scale=None):
 
     images = tf.cast(images, dtype=cfg.dtype)
