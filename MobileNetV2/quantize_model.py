@@ -90,26 +90,6 @@ def find_feature_map_scale(x):
     scale = find_best_scale_multi_core(x, num_step=10, num_bit=8)
     return scale
 
-'''
-def find_weight_scale(w):
-    w_max = np.max(np.abs(w), axis=0, keepdims=True)
-    w_max = np.max(w_max, axis=1, keepdims=True)
-    w_max = np.max(w_max, axis=2, keepdims=True)
-    w_max[w_max < 1e-5] = 128
-
-    scale = w_max / 128
-    return scale
-
-
-def find_feature_map_scale(x):
-    x_max = np.max(np.abs(x))
-    if x_max <= 6.0:
-        return x_max / 128
-    x_max = np.power(2, np.floor(np.log2(x_max)))
-    scale = x_max / 128
-    return scale
-'''
-
 
 def prepare_calibrate_imgs(img_dir='/home/lzy/DL_DATA/ILSVRC/Data/CLS-LOC/val/'):
     img_path_list = os.listdir(img_dir)

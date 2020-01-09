@@ -8,14 +8,6 @@ from PIL import Image
 import cfg
 
 
-def mix_up(images, labels, batch_size):
-    beta = tf.distributions.Beta(0.2, 0.2)
-    lam = beta.sample((batch_size, 1, 1, 1))
-    images = lam * images + (1 - lam) * images[::-1]
-    labels = lam * labels + (1 - lam) * labels[::-1]
-    return images, labels
-
-
 def train_func(image,
                resize=transforms.Resize(cfg.min_size)
                ):
@@ -56,9 +48,9 @@ def val_parse(filename, label):
     return image, label
 
 
-def make_train_dataset(dir='/home/lzy/DL_DATA/ILSVRC/Data/CLS-LOC/train/',
+def make_train_dataset(dir=cfg.train_dir,
                        batch_size=cfg.batch_size):
-    with open('../data/train.txt', 'r') as f:
+    with open(cfg.train_txt, 'r') as f:
         img_info = f.readlines()
     random.shuffle(img_info)
     filename_list = []
@@ -85,8 +77,8 @@ def make_train_dataset(dir='/home/lzy/DL_DATA/ILSVRC/Data/CLS-LOC/train/',
     return iterator
 
 
-def make_val_dataset(dir='/home/lzy/DL_DATA/ILSVRC/Data/CLS-LOC/val/'):
-    with open('../data/val.txt', 'r') as f:
+def make_val_dataset(dir=cfg.val_dir):
+    with open(cfg.val_txt, 'r') as f:
         img_info = f.readlines()
 
     filename_list = []

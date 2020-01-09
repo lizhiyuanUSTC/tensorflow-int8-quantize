@@ -7,29 +7,27 @@ bn_momentum = 0.99
 
 first_conv_name = 'conv1'
 
+# data config
+train_dir = '/home/lzy/DL_DATA/ILSVRC/Data/CLS-LOC/train/'
+train_txt = 'data/train.txt'
+val_dir = '/home/lzy/DL_DATA/ILSVRC/Data/CLS-LOC/val/'
+val_txt = 'data/val.txt'
+
 # data preprocess
 image_mean = [127.5, 127.5, 127.5]
 image_std = [127.5, 127.5, 127.5]
 
-model_path = 'train_log/model_dump'
-log_path = 'train_log/logs'
+model_path = 'log/model_dump'
+log_path = 'log/tb_dump'
 
-if not os.path.exists('train_log'):
-    os.mkdir('train_log')
+if not os.path.exists('log'):
+    os.mkdir('log')
 if not os.path.exists(model_path):
     os.mkdir(model_path)
 if not os.path.exists(log_path):
     os.mkdir(log_path)
 
 dtype = 'float32'
-
-
-# data preprocess
-fb_preprocess = False
-if fb_preprocess:
-    init_model_checkpoint_path = 'train_log/model_fb.ckpt'
-else:
-    init_model_checkpoint_path = 'train_log/model.ckpt'
 
 # data augmentation
 inception_resize = False
